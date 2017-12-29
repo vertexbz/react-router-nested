@@ -8,10 +8,12 @@ It renders `Route` component and keeps its all props and renders `Router` compon
 ```jsx
 <Switch>
     <NestedRouter path="/settings">
-        <Route path="/general" component={General}/>
-        <Route path="/user" component={User}/>
-        <Route path="/other" component={Other}/>
-        <Redirect to="/general" />
+        <Switch>
+            <Route path="/general" component={General}/>
+            <Route path="/user" component={User}/>
+            <Route path="/other" component={Other}/>
+            <Redirect to="/general" />
+        </Switch>
     </NestedRouter>
     <Route path="/" component={Main}/>
 </Switch>
