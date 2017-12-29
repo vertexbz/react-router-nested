@@ -93,6 +93,8 @@ typings/
 # dotenv environment variables file
 .env
 
+yarn.lock
+package-lock.json
 
 lib/
 

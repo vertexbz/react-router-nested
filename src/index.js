@@ -1,53 +1,65 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Route, Router } from 'react-router';
-import { stripBasenameProxy, withBase } from './utils';
+import { stripBasename, withBase } from './utils';
 import readOnlyOverrideProxy from './proxy';
+import NavHoC from './nav';
 
-import type { Element } from 'react';
 import type {
-    History, NestedRouterProps, ReactRouterRenderProps, RenderProps, RouteChildren, RouteComponent, RouteRenderFunc
+    HistoryType, LocationType, NestedRouterProps, ReactRouterRenderProps, RenderProps, RouteChildren, RouteComponent,
+    RouteRenderFunc
 } from './types';
 
+export const stripBasenameProxy = (basename: string, location: LocationType): LocationType => readOnlyOverrideProxy({
+    fullPathname: location.pathname
+}, {
+    pathname: (pathname: string): string => stripBasename(basename, pathname)
+})(location);
+
+export default
 class NestedRouter extends React.Component<NestedRouterProps> {
-    static propTypes = Route.propTypes;
-    static contextTypes = Route.contextTypes;
+    static propTypes: * = Route.propTypes;
+    static contextTypes: * = Route.contextTypes;
 
-    url = '/';
+    static createNav: * = NavHoC;
 
-    getContextHistory = (): History => this.context.router.history;
+    url: string = '/';
+
+    getContextHistory = (): HistoryType => this.context.router.history;
 
     historyOverrides = {
-        createHref: (url: string) => withBase(this.url, url),
-        push: (url: string) => this.getContextHistory().push(withBase(this.url, url)),
-        replace: (url: string) => this.getContextHistory().replace(withBase(this.url, url))
+        createHref: (url: string): string => withBase(this.url, url),
+        push: (url: string, global: boolean = false): void => this.getContextHistory().push(global ? url : withBase(this.url, url)),
+        replace: (url: string, global: boolean = false): void => this.getContextHistory().replace(global ? url : withBase(this.url, url))
     };
 
     historyCreators = {
-        location: (location: Location): Location => stripBasenameProxy(this.url, location)
+        location: (location: LocationType): LocationType => stripBasenameProxy(this.url, location)
     };
 
     historyProxy = readOnlyOverrideProxy(this.historyOverrides, this.historyCreators)(this.getContextHistory());
 
-    render(): Element<Route> {
+    render(): React.Element<Route> {
         const { component, render, children, ...props } = this.props;
 
         return (
-            <Route {...props} render={({ match }: ReactRouterRenderProps) => {
-                this.url = match.url;
+            <Route
+                {...props} render={(props: ReactRouterRenderProps): React.Element<Router> => {
+                    this.url = props.match.url;
 
-                return (
-                    <Router history={this.historyProxy}>
-                        {this.renderChildren(component, render, children, {})}
-                    </Router>
-                );
-            }} />
+                    return (
+                        <Router history={this.historyProxy}>
+                            {this.renderChildren(component, render, children, props)}
+                        </Router>
+                    );
+                }}
+            />
         );
     }
 
-    renderChildren = (Component: ?RouteComponent, render: ?RouteRenderFunc, children: ?RouteChildren, props: RenderProps) => {
+    renderChildren = (Component: ?RouteComponent, render: ?RouteRenderFunc, children: ?RouteChildren, props: RenderProps): React.Node => {
         if (Component) {
-            return (<Component {...props} />);
+            return <Component {...props} />;
         }
 
         if (render) {
@@ -65,5 +77,3 @@ class NestedRouter extends React.Component<NestedRouterProps> {
         return null;
     };
 }
-
-export default NestedRouter;
