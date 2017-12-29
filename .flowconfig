@@ -1,0 +1,14 @@
+[include]
+./src
+
+[ignore]
+
+[libs]
+./flow-typed
+
+[lints]
+
+[options]
+suppress_comment= \\(.\\|\n\\)*\\$FlowIgnore
+
+[strict]
