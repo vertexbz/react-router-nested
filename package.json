@@ -1,9 +1,13 @@
 {
   "name": "react-router-nested",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "React Router addon for nesting in for declaring nested paths without knowledge of what was the parent url for current scope.",
   "main": "lib/index.js",
   "author": "Adam Makświej <adam.makswiej@gmail.com>",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vertexbz/react-router-nested.git"
+  },
   "license": "MIT",
   "dependencies": {
     "classnames": "^2.2.5",
