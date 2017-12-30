@@ -1,20 +1,14 @@
 // @flow
 import * as React from 'react';
 import { Route, Router } from 'react-router';
+import CreateProxy from 'recursive-proxy';
 import { stripBasename, withBase } from './utils';
-import readOnlyOverrideProxy from './proxy';
 export { default as createNav } from './nav';
 
 import type {
-    HistoryType, LocationType, NestedRouterProps, ReactRouterRenderProps, RenderProps, RouteChildren, RouteComponent,
+    HistoryType, NestedRouterProps, ReactRouterRenderProps, RenderProps, RouteChildren, RouteComponent,
     RouteRenderFunc
 } from './types';
-
-export const stripBasenameProxy = (basename: string, location: LocationType): LocationType => readOnlyOverrideProxy({
-    fullPathname: location.pathname
-}, {
-    pathname: (pathname: string): string => stripBasename(basename, pathname)
-})(location);
 
 export default
 class NestedRouter extends React.Component<NestedRouterProps> {
@@ -26,16 +20,17 @@ class NestedRouter extends React.Component<NestedRouterProps> {
     getContextHistory = (): HistoryType => this.context.router.history;
 
     historyOverrides = {
-        createHref: (url: string): string => withBase(this.url, url),
-        push: (url: string, global: boolean = false): void => this.getContextHistory().push(global ? url : withBase(this.url, url)),
-        replace: (url: string, global: boolean = false): void => this.getContextHistory().replace(global ? url : withBase(this.url, url))
+        '.createHref': (url: string): string => withBase(this.url, url),
+        '.push': (url: string, global: boolean = false): void => this.getContextHistory().push(global ? url : withBase(this.url, url)),
+        '.replace': (url: string, global: boolean = false): void => this.getContextHistory().replace(global ? url : withBase(this.url, url))
     };
 
     historyCreators = {
-        location: (location: LocationType): LocationType => stripBasenameProxy(this.url, location)
+        '.location.pathname': (pathname: string): string => stripBasename(this.url, pathname),
+        '.location.fullPathname': (): string => this.getContextHistory().location.pathname
     };
 
-    historyProxy = readOnlyOverrideProxy(this.historyOverrides, this.historyCreators)(this.getContextHistory());
+    historyProxy = new CreateProxy({ value: this.historyOverrides, creator: this.historyCreators })(this.getContextHistory(), this);
 
     render(): React.Element<Route> {
         const { component, render, children, ...props } = this.props;
