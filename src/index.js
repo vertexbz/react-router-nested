@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Route, Router } from 'react-router';
 import { stripBasename, withBase } from './utils';
 import readOnlyOverrideProxy from './proxy';
-import NavHoC from './nav';
+export { default as createNav } from './nav';
 
 import type {
     HistoryType, LocationType, NestedRouterProps, ReactRouterRenderProps, RenderProps, RouteChildren, RouteComponent,
@@ -20,8 +20,6 @@ export default
 class NestedRouter extends React.Component<NestedRouterProps> {
     static propTypes: * = Route.propTypes;
     static contextTypes: * = Route.contextTypes;
-
-    static createNav: * = NavHoC;
 
     url: string = '/';
 
