@@ -3,6 +3,11 @@
 This library adds nesting to `react-router`. 
 It renders `Route` component and keeps its all props and renders `Router` component inside for newly created scope (the route's address).
 
+## Props
+
+NestedRouter props are the same as 
+[Route](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md)
+component props
 
 ## Example
 ```jsx
