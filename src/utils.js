@@ -39,20 +39,20 @@ export const convertTrueProps = <O: {}>(obj: O, replacements: $Shape<O> = {}): O
         }
     }
 
-    return result;
+    return (result: any);
 };
 
-type PropsConfig = {|+[string]: ?string|};
+type PropsConfig = {+[string]: mixed};
 
-type PropsSchema = {|+[string]: mixed|};
+type PropsSchema = {+[string]: mixed};
 
-export const configureProps = (propsSchema: PropsSchema, config: PropsConfig): PropsSchema => {
+export const configureProps = <P: PropsSchema>(propsSchema: P, config: PropsConfig): P => {
     const result = {};
     for (const [key, value] of Object.entries(propsSchema)) {
-        if (key in config && config[key]) {
+        if (typeof config[key] === 'string') {
             result[config[key]] = value;
         }
     }
 
-    return result;
+    return (result: any);
 };

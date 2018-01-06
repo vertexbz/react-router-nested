@@ -15,7 +15,8 @@ const defaultOpts = {
     isActive: false,
     push: false,
     replace: false,
-    to: false
+    to: false,
+    triageDestination: (args: [], props: NavProps): string => props.to
 };
 
 const trueOptValues = {
@@ -31,7 +32,7 @@ export default (opts: NavOpts = {}): * => <A: {}, C: React.ComponentType<A>, P: 
         static displayName = `Nav(${getDisplayName(Wrapped)})`;
 
         static propTypes = {
-            to: PropTypes.string.isRequired,
+            to: PropTypes.string,
             exact: PropTypes.bool,
             global: PropTypes.bool
         };
@@ -58,7 +59,7 @@ export default (opts: NavOpts = {}): * => <A: {}, C: React.ComponentType<A>, P: 
         render(): React.Element<C> {
             const router = this.context.router;
 
-            invariant(router, `You should not use <${Nav.displayName}> outside a <Router>`);
+            invariant(router, `You should not use <${Nav.displayName || 'Nav(Component)'}> outside a <Router>`);
 
             const { to, exact, global, ...props } = this.props;
 
@@ -72,17 +73,13 @@ export default (opts: NavOpts = {}): * => <A: {}, C: React.ComponentType<A>, P: 
             const propsSchema = {
                 to,
                 isActive,
-                push: (): void => history.push(to, global),
-                replace:  (): void => history.replace(to, global)
+                push: (...args: *): void => history.push(config.triageDestination(args, this.props), global),
+                replace:  (...args: *): void => history.replace(config.triageDestination(args, this.props), global)
             };
 
             const navProps = configureProps(propsSchema, config);
 
-            if (isActive) {
-                navProps.className = cx(props.className, config.activeClassName);
-            }
-
-            return <Wrapped {...props} {...navProps} />;
+            return <Wrapped {...props} {...navProps} className={cx(props.className, config.activeClassName)} />;
         }
     }
 

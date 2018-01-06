@@ -4,6 +4,7 @@ import * as React from 'react';
 export type LocationType = Location;
 
 export type HistoryType = History & {
+    location: LocationType,
     push: (string) => void,
     replace: (string) => void
 };
@@ -45,11 +46,13 @@ export type NavOpts = $Shape<{
     isActive: boolean | string,
     push: boolean | string,
     replace: boolean | string,
-    to: boolean | string
+    to: boolean | string,
+    triageDestination: (arg: [], props: {}) => string
 }>;
 
 export type NavProps = {|
     to: string,
     exact?: boolean,
-    global?: boolean
+    global?: boolean,
+    className?: string
 |};

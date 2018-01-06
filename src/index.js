@@ -30,7 +30,7 @@ class NestedRouter extends React.Component<NestedRouterProps> {
         '.location.fullPathname': (): string => this.getContextHistory().location.pathname
     };
 
-    historyProxy = new CreateProxy({ value: this.historyOverrides, creator: this.historyCreators })(this.getContextHistory(), this);
+    historyProxy = new CreateProxy({ value: this.historyOverrides, creator: this.historyCreators }, this.getContextHistory(), this);
 
     render(): React.Element<Route> {
         const { component, render, children, ...props } = this.props;
