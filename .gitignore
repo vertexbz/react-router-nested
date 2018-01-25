@@ -96,5 +96,6 @@ typings/
 yarn.lock
 package-lock.json
 
-lib/
+/lib/
 
+/coverage/

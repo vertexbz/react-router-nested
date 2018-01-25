@@ -3,12 +3,12 @@ import { createPath } from 'history';
 
 import type { LocationType } from './types';
 
-const addLeadingSlash = (path: string): string => {
+export const addLeadingSlash = (path: string): string => {
     return path.charAt(0) === '/' ? path : '/' + path;
 };
 
 export const stripBasename = (basename: string, location: string): string => {
-    if (!basename) {
+    if (!basename || basename === '') {
         return location;
     }
 
@@ -19,40 +19,30 @@ export const stripBasename = (basename: string, location: string): string => {
     return location.substr(basename.length);
 };
 
-const createURL = (location: LocationType | string): string =>
+export const createURL = (location: LocationType | string): string =>
     typeof location === 'string' ? location : createPath(location);
 
-export const withBase = (base: string, path: LocationType | string): string => addLeadingSlash(base + createURL(path));
+export const withBase = (base: string, path: LocationType | string): string => addLeadingSlash(base + createURL(path)).replace(/\/{2,}/g, '/');
 
-export const convertTrueProps = <O: {}>(obj: O, replacements: $Shape<O> = {}): O => {
+export const getStringValues = (obj: {}): Array<string> => (Object.values(obj): any).filter((value: *): boolean => typeof value === 'string');
+
+export const buildProps = (obj: {}, schema: {}): {} => {
     const result = {};
 
     for (const [key, value] of Object.entries(obj)) {
-        if (value === true) {
-            if (key in replacements) {
-                result[key] = replacements[key];
-            } else {
-                result[key] = key;
-            }
-        } else {
-            result[key] = value;
+        if (key in schema && typeof value === 'string') {
+            result[value] = schema[key];
         }
     }
 
-    return (result: any);
+    return result;
 };
 
-type PropsConfig = {+[string]: mixed};
-
-type PropsSchema = {+[string]: mixed};
-
-export const configureProps = <P: PropsSchema>(propsSchema: P, config: PropsConfig): P => {
-    const result = {};
-    for (const [key, value] of Object.entries(propsSchema)) {
-        if (typeof config[key] === 'string') {
-            result[config[key]] = value;
-        }
+export const configOrProp = <K: string, P: { [K]: * }>(config: { props: { [string]: any } } & P, props: P, key: K): * => {
+    const propName = config.props[key];
+    if (typeof propName === 'string' && propName in props) {
+        return props[propName];
     }
 
-    return (result: any);
+    return config[key];
 };

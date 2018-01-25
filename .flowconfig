@@ -3,7 +3,10 @@
 ./test/
 
 [ignore]
-./lib/
+<PROJECT_ROOT>/config/
+<PROJECT_ROOT>/example/
+<PROJECT_ROOT>/lib/
+<PROJECT_ROOT>/test/
 
 [libs]
 ./flow-typed/

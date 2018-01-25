@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { Route, Router } from 'react-router';
 import CreateProxy from 'recursive-proxy';
-import { stripBasename, withBase } from './utils';
+import { stripBasename, withBase, addLeadingSlash } from './utils';
 export { default as createNav } from './nav';
 
 import type {
@@ -26,11 +26,15 @@ class NestedRouter extends React.Component<NestedRouterProps> {
     };
 
     historyCreators = {
-        '.location.pathname': (pathname: string): string => stripBasename(this.url, pathname),
+        '.location.pathname': (pathname: string): string => addLeadingSlash(stripBasename(this.url, pathname)),
         '.location.fullPathname': (): string => this.getContextHistory().location.pathname
     };
 
-    historyProxy = new CreateProxy({ value: this.historyOverrides, creator: this.historyCreators }, this.getContextHistory(), this);
+    historyProxy = new CreateProxy(
+        { value: this.historyOverrides, creator: this.historyCreators, followNonPlainObject: true },
+        this.getContextHistory(),
+        this
+    );
 
     render(): React.Element<Route> {
         const { component, render, children, ...props } = this.props;

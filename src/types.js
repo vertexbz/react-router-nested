@@ -1,12 +1,16 @@
 // @flow
 import * as React from 'react';
 
-export type LocationType = Location;
+export type LocationType = Location & { fullPathname: string, pathname: string };
 
 export type HistoryType = History & {
     location: LocationType,
-    push: (string) => void,
-    replace: (string) => void
+    push: (string, global?: boolean) => void,
+    replace: (string, global?: boolean) => void
+};
+
+export type RouterContext = {
+    history: HistoryType
 };
 
 export type ReactRouterRenderProps = {
@@ -41,18 +45,29 @@ export type NestedRouterProps = {|
     location?: LocationType
 |};
 
-export type NavOpts = $Shape<{
-    activeClassName: boolean | string,
-    isActive: boolean | string,
-    push: boolean | string,
-    replace: boolean | string,
-    to: boolean | string,
-    triageDestination: (arg: [], props: {}) => string
-}>;
+type NavPropsOpts = {
+    to: string | (...*) => string,
+    global: false | string,
+    activeClassName: false | string,
+    exact: false | string,
+    replace: false | string
+};
 
-export type NavProps = {|
-    to: string,
-    exact?: boolean,
-    global?: boolean,
+type NavPassedPropsOpts = {
+    handler: string,
+    isActive: false | string,
+    currentPath: false | string
+};
+
+export type NavOpts = {
+    props: $Shape<NavPropsOpts>,
+    passedProps: $Shape<NavPassedPropsOpts>,
+    activeClassName: false | string,
+    global: boolean,
+    replace: boolean,
+    exact: boolean
+};
+
+export type NavProps = {
     className?: string
-|};
+};

@@ -6,7 +6,9 @@
 .idea
 *.iml
 out
-gen### macOS template
+gen
+
+### macOS template
 # General
 .DS_Store
 .AppleDouble
@@ -94,8 +96,10 @@ typings/
 .env
 test/
 src/
+config/
 .babelrc
 .gitignore
 .flowconfig
 yarn.lock
 flow/
+/coverage/
