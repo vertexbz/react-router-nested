@@ -64,7 +64,7 @@ It is an object with following keys, all keys are optional. Props override `NavO
 
 | Option          |           Type          |  Default  | Description                                                                                                                                                  |
 |-----------------|:-----------------------:|:---------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| to              | `string` or `false`     |  `false`  |                                                                                                                                                              |
+| to              | `string` or `false`     |  `false`  | Property added to `Component` to provide target url.                                                                                                         |
 | activeClassName | `string` or `false`     |  `false`  | Property added to `Component` to override `NavOptions` **className** appended to `Component`'s when current url matches prop `to`¹.                          |
 | exact           | `boolean`               |  `false`  | Property added to `Component` to override `NavOptions` setting weather to use **exact** match for matching `to` with current url.                            |
 | global          | `boolean`               |  `false`  | Property added to `Component` to override `NavOptions` setting weather to use **global** path for matching `to` with current url. For use with NestedRouter. |
