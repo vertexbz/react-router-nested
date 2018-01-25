@@ -62,13 +62,13 @@ NavOptions is an optional parameter - it is an object with following keys, all k
 
 It is an object with following keys, all keys are optional. Props override `NavOptions`
 
-| Option          |           Type          |  Default  | Description                                                                                                                                                  |
-|-----------------|:-----------------------:|:---------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| to              | `string` or `false`     |  `false`  | Property added to `Component` to provide target url.                                                                                                         |
-| activeClassName | `string` or `false`     |  `false`  | Property added to `Component` to override `NavOptions` **className** appended to `Component`'s when current url matches prop `to`¹.                          |
-| exact           | `boolean`               |  `false`  | Property added to `Component` to override `NavOptions` setting weather to use **exact** match for matching `to` with current url.                            |
-| global          | `boolean`               |  `false`  | Property added to `Component` to override `NavOptions` setting weather to use **global** path for matching `to` with current url. For use with NestedRouter. |
-| replace         | `boolean`               |  `false`  | Property added to `Component` to override `NavOptions` setting weather to use use **replace** instead of *push* method when changing an url.                 |
+| Option          |                  Type                 |  Default  | Description                                                                                                                                                                |
+|-----------------|:-------------------------------------:|:---------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| to              | `string` or `(...handlerArgs) => url` |  `false`  | Property added to `Component` to provide target url, or function converting `handler`'s arguments (usually it is triggered event) to url to navigate.        |
+| activeClassName | `string` or `false`                   |  `false`  | Property added to `Component` to override `NavOptions` **className** appended to `Component`'s when current url matches prop `to`¹.                          |
+| exact           | `boolean`                             |  `false`  | Property added to `Component` to override `NavOptions` setting weather to use **exact** match for matching `to` with current url.                            |
+| global          | `boolean`                             |  `false`  | Property added to `Component` to override `NavOptions` setting weather to use **global** path for matching `to` with current url. For use with NestedRouter. |
+| replace         | `boolean`                             |  `false`  | Property added to `Component` to override `NavOptions` setting weather to use use **replace** instead of *push* method when changing an url.                 |
 
 
 #### NavPassedPropsOptions
