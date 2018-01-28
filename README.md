@@ -2,8 +2,6 @@
 
 This library adds nesting to `react-router` and provides `createNav` - `Nav` higher order component wrapper.
 
-It also provides 
-
 
 ## NestedRouter 
 It renders `Route` component and keeps its all props and renders `Router` component inside for newly created scope (the route's address).
